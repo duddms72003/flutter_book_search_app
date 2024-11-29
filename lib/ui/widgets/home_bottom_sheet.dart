@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_search_app/data/model/book.dart';
 import 'package:flutter_book_search_app/ui/detail/detail_page.dart';
 
 class HomeBottomSheet extends StatelessWidget {
+  HomeBottomSheet(this.book);
+  Book book;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,7 +15,7 @@ class HomeBottomSheet extends StatelessWidget {
       child: Row(
         children: [
           Image.network(
-            'https://picsum.photos/200/300',
+            book.image,
             fit: BoxFit.cover,
           ),
           SizedBox(
@@ -22,21 +26,24 @@ class HomeBottomSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '해피포터와 마법사의 돌',
+                  book.title,
+                  maxLines: 2,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),
                 ),
                 Text(
-                  'J.K. 롤링',
+                  book.author,
+                  maxLines: 2,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                 ),
                 Text(
-                  '해리포터와 마법사의 돌 내용',
+                  book.description,
+                  maxLines: 2,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -48,7 +55,7 @@ class HomeBottomSheet extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return DetailPage();
+                        return DetailPage(book);
                       }),
                     );
                   },

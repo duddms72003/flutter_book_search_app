@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_search_app/ui/home/home_view_model.dart';
 import 'package:flutter_book_search_app/ui/widgets/home_bottom_sheet.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   TextEditingController textEditingController = TextEditingController();
 
   @override
@@ -17,12 +19,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onSearch(String text) {
-    //
+    //TOOD 홈 뷰모델의 searchBooks 메서드 호출
+    ref.read(homeViewModelProvider.notifier).searchBooks(text);
     print(' 호출됨');
   }
 
   @override
   Widget build(BuildContext context) {
+    final homeState = ref.watch(homeViewModelProvider);
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -67,24 +72,24 @@ class _HomePageState extends State<HomePage> {
         ),
         body: GridView.builder(
           padding: EdgeInsets.all(20),
-          itemCount: 10,
+          itemCount: homeState.books.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             childAspectRatio: 3 / 4,
             crossAxisSpacing: 10,
           ),
           itemBuilder: (context, index) {
+            final book = homeState.books[index];
             return GestureDetector(
               onTap: () {
-                //
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return HomeBottomSheet();
+                    return HomeBottomSheet(book);
                   },
                 );
               },
-              child: Image.network('https://picsum.photos/200/300'),
+              child: Image.network(book.image),
             );
           },
         ),
